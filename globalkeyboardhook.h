@@ -20,7 +20,7 @@ public:
     void uninstallHook();
 
 signals:
-    void keyPressed(Qt::Key pressedKey);
+    void keyPressed(uint32_t vkCode);
 
 private:
 #ifdef Q_OS_WIN

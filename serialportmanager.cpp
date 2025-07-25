@@ -74,13 +74,12 @@ void SerialPortManager::close()
     }
 }
 
-void SerialPortManager::sendCommand(const QString& cmd)
+void SerialPortManager::sendData(const QByteArray &src)
 {
     if (serial.isOpen()) {
         QByteArray data(16, 0);
-        QByteArray cmdBytes = cmd.toUtf8();
-        int copyLen = qMin(cmdBytes.size(), 12);
-        memcpy(data.data(), cmdBytes.data(), copyLen);
+        int copyLen = qMin(src.size(), 12);
+        memcpy(data.data(), src.data(), copyLen);
 
         uint32_t crc = crc32.calculate((uint32_t*)data.constData(), 12/4);
         data[12] = crc & 0xFF;
@@ -91,6 +90,29 @@ void SerialPortManager::sendCommand(const QString& cmd)
         serial.write(data);
         serial.flush();
 
-        qDebug() << "Sent:" << cmd << "CRC32:" << QString::number(crc, 16);
+        qDebug() << "Sent:" << src << "CRC32:" << QString::number(crc, 16);
+    }
+}
+
+void SerialPortManager::sendData(uint32_t code)
+{
+    if (serial.isOpen()) {
+        QByteArray data(16, 0);
+
+        data[0] = code & 0xFF;
+        data[1] = (code >> 8) & 0xFF;
+        data[2] = (code >> 16) & 0xFF;
+        data[3] = (code >> 24) & 0xFF;
+
+        uint32_t crc = crc32.calculate((uint32_t*)data.constData(), 12/4);
+        data[12] = crc & 0xFF;
+        data[13] = (crc >> 8) & 0xFF;
+        data[14] = (crc >> 16) & 0xFF;
+        data[15] = (crc >> 24) & 0xFF;
+
+        serial.write(data);
+        serial.flush();
+
+        qDebug() << "Sent:" << code << "CRC32:" << QString::number(crc, 16);
     }
 }

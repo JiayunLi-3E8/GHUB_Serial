@@ -62,24 +62,9 @@ ApplicationWindow {
     }
 
     GlobalKeyboardHook {
-        onKeyPressed: pressedKey => {
-                          console.log("Global Key Pressed:", pressedKey)
-                          switch (pressedKey) {
-                              case Qt.Key_F13:
-                              serialPortManager.sendCommand("Enable")
-                              break
-                              case Qt.Key_F14:
-                              serialPortManager.sendCommand("Disable")
-                              break
-                              case Qt.Key_F15:
-                              serialPortManager.sendCommand("Berrey")
-                              break
-                              case Qt.Key_F16:
-                              serialPortManager.sendCommand("Aug")
-                              break
-                              default:
-                              break
-                          }
+        onKeyPressed: vkCode => {
+                          console.log("Global Key Pressed:", vkCode)
+                          serialPortManager.sendData(vkCode)
                       }
     }
 

@@ -47,30 +47,10 @@ LRESULT CALLBACK GlobalKeyboardHook::KeyboardProc(int nCode, WPARAM wParam, LPAR
     if (nCode == HC_ACTION && wParam == WM_KEYDOWN)
     {
         KBDLLHOOKSTRUCT *p = reinterpret_cast<KBDLLHOOKSTRUCT *>(lParam);
-        Qt::Key pressedKey;
 
-        switch (p->vkCode)
+        if (p->vkCode >= VK_F13 && p->vkCode <= VK_F24)
         {
-        case VK_F13:
-            pressedKey = Qt::Key_F13;
-            break;
-        case VK_F14:
-            pressedKey = Qt::Key_F14;
-            break;
-        case VK_F15:
-            pressedKey = Qt::Key_F15;
-            break;
-        case VK_F16:
-            pressedKey = Qt::Key_F16;
-            break;
-        default:
-            pressedKey = Qt::Key_unknown;
-            break;
-        }
-
-        if (pressedKey != Qt::Key_unknown && instance)
-        {
-            emit instance->keyPressed(pressedKey);
+            emit instance->keyPressed(p->vkCode);
         }
     }
     return CallNextHookEx(g_hHook, nCode, wParam, lParam);

@@ -64,7 +64,8 @@ public:
 
     Q_INVOKABLE bool open();
     Q_INVOKABLE void close();
-    Q_INVOKABLE void sendCommand(const QString& cmd);
+    Q_INVOKABLE void sendData(const QByteArray &src);
+    Q_INVOKABLE void sendData(uint32_t code);
 
 signals:
     void portNameChanged();
