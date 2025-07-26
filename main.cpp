@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 #include <qicon.h>
 #include <QQuickWindow>
 #include "kdsingleapplication.h"
@@ -14,12 +15,16 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+    app.setApplicationVersion(APP_VERSION);
     app.setOrganizationName("GHUBSerial");
     app.setOrganizationDomain("ghubserial.com");
     app.setApplicationName("GHUBSerial");
     app.setWindowIcon(QIcon(":/qt/qml/GHUBSerial/res/TrayIcon.ico"));
 
     QQmlApplicationEngine engine;
+
+    engine.rootContext()->setContextProperty("AppVersion", app.applicationVersion());
+
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,

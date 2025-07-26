@@ -45,6 +45,15 @@ void SerialPortInfoModel::refresh()
     emit baudRatesChanged();
 }
 
+QString SerialPortInfoModel::getDescByName(const QString &name) const
+{
+    for (int i = 0; i < m_ports.count(); ++i) {
+        if (m_ports[i].portName() == name)
+            return m_ports[i].description();
+    }
+    return QString();
+}
+
 QVariantList SerialPortInfoModel::baudRates() const
 {
     QVariantList list;

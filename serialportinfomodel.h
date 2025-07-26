@@ -24,6 +24,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void refresh();
+    Q_INVOKABLE QString getDescByName(const QString &name) const;
     QVariantList baudRates() const;
 
 signals:

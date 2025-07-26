@@ -12,6 +12,23 @@ ApplicationWindow {
     visible: true
     title: qsTr("串口配置")
 
+    Timer {
+        interval: 1000
+        repeat: true
+        running: true
+        onTriggered: {
+            serialPortInfoModel.refresh()
+            var desc = serialPortInfoModel.getDescByName(serialPortManager.portName)
+            if (desc === "" && serialPortManager.isOpen) {
+                serialPortManager.close()
+                console.log("close")
+            } else if (desc !== "" && !serialPortManager.isOpen) {
+                serialPortManager.open()
+                console.log("open")
+            }
+        }
+    }
+
     SerialPortManager {
         id: serialPortManager
         portName: settings.port
@@ -72,7 +89,7 @@ ApplicationWindow {
         id: tray
         visible: true
         icon.source: "qrc:/qt/qml/GHUBSerial/res/TrayIcon.ico"
-        tooltip: "GHUB串口"
+        tooltip: "GHUB串口 " + AppVersion
 
         menu: Menu {
             MenuItem {
